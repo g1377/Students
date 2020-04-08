@@ -18,6 +18,7 @@ public class ModifyStudent extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         idStudent = req.getParameter("idModifyStudent");
+        resp.setContentType("application/json; charset=utf-8");
 
         Student student = DBManager.getStudentById(idStudent);
         req.setAttribute("studentById", student);

@@ -20,26 +20,20 @@
         <form method="post" action="/termCreate">
             <p><input type="text" style="font-size: 1.2rem" required placeholder="Название семестра" name="termName">
             </p>
-            <p><input type="text" style="font-size: 1.2rem" placeholder="Длительность" required id="duration"
+            <p><input type="text" style="font-size: 1.2rem"  placeholder="Длительность" required id="duration"
                       name="duration">
             </p>
 
-
-            <table id="tb1" border="1">
-                <tr>
-                    <th>Дисциплины в семестре</th>
-                    <th></th>
-                </tr>
+            <p>Дисциплины в семестре:</p>
+            <select multiple required name="selectTermDisc" style="height: 100px">
                 <c:forEach items="${disciplines}" var="d">
-                    <tr>
-                        <td>${d.disciplina}</td>
-                        <td><input type="checkbox" value="${d.id}"></td>
-                    </tr>
+                    <option value="${d.id}"> ${d.disciplina}</option>
                 </c:forEach>
-            </table>
+            </select>
             <p></p>
 
-            <button id="butdisc" onclick="createTermDisc()" style="margin-left: 13%;">Создать</button>
+
+            <button id="butdisc" style="margin-left: 12%;">Создать</button>
         </form>
         <form id="createTermDiscBut" method="get" action="/testc">
             <input type="hidden" id="createTerm" name="createTerm">

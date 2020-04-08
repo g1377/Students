@@ -1,7 +1,7 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page isELIgnored="false" %>
-
 
 <body>
 <title>Students</title>
@@ -14,8 +14,9 @@
 <div>
     <table class="ml" style="width: 55%">
         <tr>
-            <td class="tds"><a href="/progresStudent" class="aSt">
-                <button class="studbut" <c:if test="${role eq 2}">style="width: 60% "</c:if>>Посмотреть успеваемость
+            <td class="tds"><a onclick="progresStudent()" class="aSt">
+                <button class="studbut"  <c:if test="${role eq 2}">style="width: 60% "</c:if>>
+                    Посмотреть успеваемость
                     выбранного студента
                 </button>
             </a></td>
@@ -43,6 +44,9 @@
 
     <form id="studentDelete" method="post" action="/students">
         <input type="hidden" name="idsDeleteStudent"></form>
+
+    <form id="studentProgres" method="get" action="/progresStudent">
+        <input type="hidden" name="idStudentForProgres"></form>
 </div>
 
 

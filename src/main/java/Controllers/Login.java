@@ -35,8 +35,6 @@ public class Login extends HttpServlet {
             req.getSession().setAttribute("username", login);
             System.out.println(role);
             resp.sendRedirect("/");
-//            req.setAttribute("current_page", "/WEB-INF/jsp/home.jsp");
-//            req.getRequestDispatcher("./WEB-INF/jsp/template.jsp").forward(req, resp);
         } else {
             req.setAttribute("errorMessage", "1");
             req.setAttribute("current_page", "/WEB-INF/jsp/login.jsp");

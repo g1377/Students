@@ -13,26 +13,24 @@
         <button type="button">Назад</button>
     </a>
 </p>
+<form action="/modifyTerm" method="post">
+    <div class="ml">
+        <h2>Для модификации семестра заполните все поля и нажмите кнопку "Применить"</h2>
+        <div>
+            <p style="font-size: 1.2rem">${termName}</p>
 
-<div class="ml">
-    <h2>Для модификации семестра заполните все поля и нажмите кнопку "Применить"</h2>
-    <div>
-        <p><input type="text" style="font-size: 1.2rem" placeholder="Длительность"></p>
-        <table id="tb1" border="1">
-            <tr>
-                <th>Дисциплины в семестре</th>
-                <th></th>
-            </tr>
-            <c:forEach items="${disciplines}" var="d">
-                <tr>
-                    <td>${d.disciplina}</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-            </c:forEach>
-        </table>
+            <p><input type="text" style="font-size: 1.2rem" placeholder="Длительность" required name="duration"></p>
+            <p>Дисциплины в семестре:</p>
+
+            <select multiple name="selectTermDisc" required style="height: 100px">
+                <c:forEach items="${disciplines}" var="d">
+                    <option value="${d.id}"> ${d.disciplina}</option>
+                </c:forEach>
+            </select>
+        </div>
     </div>
-</div>
-<p>
-    <button id="butdisc" style="margin-left: 21%;">Применить</button>
-</p>
+    <p>
+        <button id="butdisc" style="margin-left: 21%;">Применить</button>
+    </p>
+</form>
 </body>

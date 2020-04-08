@@ -3,21 +3,30 @@ package Database;
 import Entity.Accaunt;
 import Entity.Disciplina;
 import Entity.Student;
+import Entity.Term;
+import Utils.DBUtils;
+import org.apache.taglibs.standard.lang.jstl.test.beans.PublicInterface2;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DBManager {
     private static Connection connection;
-    public static PreparedStatement modifyDStm;
-    public static PreparedStatement addDisc;
-    public static PreparedStatement addStud;
-    public static PreparedStatement deletStud;
-    public static PreparedStatement modStud;
-    public static PreparedStatement dellDisc;
+    private static PreparedStatement modifyDStm;
+    private static PreparedStatement addDisc;
+    private static PreparedStatement addStud;
+    private static PreparedStatement deletStud;
+    private static PreparedStatement modStud;
+    private static PreparedStatement dellDisc;
     private static PreparedStatement getAccByLogPass;
     private static PreparedStatement createTerm;
+    private static PreparedStatement getAllActiveTerms;
+    private static PreparedStatement addDiscForTerm;
+    private static PreparedStatement modifyTerm;
+    private static PreparedStatement deleteTermByMod;
+    private static PreparedStatement modifyTermByDisc;
+    private static PreparedStatement updateDurationTerm;
+    private static PreparedStatement deleteTerm;
 
 
     static {
@@ -25,6 +34,7 @@ public class DBManager {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost/student_crm?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root");
+
             modifyDStm = connection.prepareStatement("UPDATE discipline SET discipline = ? WHERE id = ?;");
             addDisc = connection.prepareStatement("INSERT INTO `discipline` (`discipline`) VALUES (?);");
             addStud = connection.prepareStatement("INSERT INTO `student_crm`.`student` (`last_name`, `name`, `group`, `date`) VALUES (?,?,?,?);");
@@ -32,8 +42,17 @@ public class DBManager {
             modStud = connection.prepareStatement("UPDATE `student` SET `last_name` = ?, `name` = ?, `group` = ? , `date` = ?  WHERE (`id` = ?);");
             dellDisc = connection.prepareStatement("UPDATE discipline SET status = 0 WHERE id = ?;");
             getAccByLogPass = connection.prepareStatement("SELECT * FROM user_role left join user on user_role.id_user = user.id  where user.user = ? and user.password = ? and user_role.id_role = ?");
-            createTerm = connection.prepareStatement("INSERT INTO term_disc (name_term, term_disciplines, duration) VALUES (?,?,?);");
-
+            createTerm = connection.prepareStatement("INSERT INTO `student_crm`.`term` (`name`, `duration`) VALUES (?, ?);");
+            getAllActiveTerms = connection.prepareStatement("SELECT * FROM term_discipline td\n" +
+                    "left join term t on td.id_term =  t.id\n" +
+                    "left join discipline d on td.id_disc = d.id\n" +
+                    "where status = 1 order by t.name");
+            deleteTermByMod = connection.prepareStatement("delete from term_discipline where id_term = ?;");
+            addDiscForTerm = connection.prepareStatement("INSERT INTO term_discipline (id_term, id_disc) values (?,?);");
+            modifyTerm = connection.prepareStatement("delete from term_discipline where id_term = ?;");
+            updateDurationTerm = connection.prepareStatement("update term set duration = ? where id = ?;");
+            modifyTermByDisc = connection.prepareStatement("insert into term_discipline(id_term, id_disc) values (?,?);");
+            deleteTerm = connection.prepareStatement("delete from term where id = ? ;");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -41,10 +60,23 @@ public class DBManager {
         }
     }
 
+
     public static Connection getConnection() {
         return connection;
     }
 
+
+    public static void deleteTermbyId(String id) {
+        DBManager.deleteTerm(id);
+        try {
+            deleteTerm.setString(1, id);
+            deleteTerm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     public static List<Disciplina> getDisciplineList() {
         List<Disciplina> disciplinas = new ArrayList<>();
@@ -113,6 +145,7 @@ public class DBManager {
         }
     }
 
+
     public static Disciplina getDiscById(String id) {
         Disciplina disciplina = new Disciplina();
         try {
@@ -171,6 +204,99 @@ public class DBManager {
         return student;
     }
 
+    public static void modifyTermByDisc(String idTerm, String[] disciplines, String duration) {
+        try {
+            for (String d : disciplines) {
+                modifyTermByDisc.setString(1, idTerm);
+                modifyTermByDisc.setString(2, d);
+                modifyTermByDisc.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteTerm(String idTerm) {
+        try {
+            modifyTerm.setString(1, idTerm);
+            modifyTerm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void updateDuration(String idTerm, String duration) {
+        try {
+            updateDurationTerm.setString(1, duration);
+            updateDurationTerm.setString(2, idTerm);
+            updateDurationTerm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static List<Term> getAllActiveTerms() {
+        List<Term> terms = new ArrayList<>();
+        try {
+            ResultSet rs = getAllActiveTerms.executeQuery();
+            while (rs.next()) {
+                Term term = new Term();
+                term.setId(rs.getString("id_term"));
+                term.setDuration(rs.getString("duration"));
+                term.setName(rs.getString("name"));
+                Disciplina disciplina = new Disciplina();
+                disciplina.setDisciplina(rs.getString("discipline"));
+                disciplina.setId(rs.getInt("id"));
+                if (!DBUtils.isCointainsTerm(terms, term)) {
+                    term.addDiscipline(disciplina);
+                    terms.add(term);
+                } else terms.get(terms.size() - 1).addDiscipline(disciplina);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return terms;
+    }
+
+    public static List<Term> getAllTerm() {
+        List<Term> terms = new ArrayList<>();
+        try {
+            ResultSet rs = connection.createStatement().executeQuery("Select * from term");
+            while (rs.next()) {
+                Term term = new Term();
+                term.setId(rs.getString("id"));
+                term.setName(rs.getString("name"));
+                terms.add(term);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return terms;
+    }
+
+    public static void createTerm(String name, String duraton, String[] disciplines) {
+        try {
+            createTerm.setString(1, name);
+            createTerm.setString(2, duraton);
+            createTerm.execute();
+
+            String idTerm = DBUtils.getIdTermByName(name, DBManager.getAllTerm());
+            for (Term t : DBManager.getAllTerm()) {
+                System.out.println(t.getName());
+            }
+            for (String d : disciplines) {
+                addDiscForTerm.setString(1, idTerm);
+                addDiscForTerm.setString(2, d);
+                addDiscForTerm.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void modifyStudent(String id, String lastName, String name, String group, String date) {
         try {
             modStud.setString(5, id);
@@ -209,18 +335,6 @@ public class DBManager {
             e.printStackTrace();
         }
         return false;
-    }
-
-
-    public static void createTerm(String name, String disc, String duration) {
-        try {
-            createTerm.setString(1, name);
-            createTerm.setString(2, disc);
-            createTerm.setString(3, duration);
-            createTerm.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 

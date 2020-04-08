@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored="false" %>
 
 <body>
 <title>Progress student</title>
@@ -19,14 +20,14 @@
             <tr>
                 <th>Фамилия</th>
                 <th>Имя</th>
-                <th>Отечство</th>
+                <th>Группа</th>
                 <th>Дата поступления</th>
             </tr>
-            <tr>
-                <td>*</td>
-                <td>*</td>
-                <td>*</td>
-                <td>*</td>
+            <tr style="text-align: center">
+                <td>${studentForProgres.lastName}</td>
+                <td>${studentForProgres.name}</td>
+                <td>${studentForProgres.group}</td>
+                <td>${studentForProgres.date}</td>
             </tr>
         </table>
     </div>

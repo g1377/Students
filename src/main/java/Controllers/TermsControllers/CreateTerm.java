@@ -15,14 +15,11 @@ import java.util.List;
 @WebServlet("/termCreate")
 public class CreateTerm extends HttpServlet {
 
-    int termd = 1;
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Disciplina> disciplinaList = DBManager.getDisciplineList();
         req.setAttribute("disciplines", disciplinaList);
-
 
 
         req.setAttribute("current_page", "/WEB-INF/jsp/termCreating.jsp");
@@ -33,9 +30,10 @@ public class CreateTerm extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String termName = req.getParameter("termName");
         String duration = req.getParameter("duration");
+        String[] disciplines = req.getParameterValues("selectTermDisc");
 
-
-
+        DBManager.createTerm(termName, duration, disciplines);
+        
         resp.sendRedirect("/term");
     }
 }

@@ -78,24 +78,18 @@ function deleteStudents() {
     $('#studentDelete').submit();
 }
 
-function createTermDisc() {
-
-    var items = $("input[type=checkbox]:checked");
-
-    if (items.length == 0) {
-        alert("Выберите дисциплины для добавления в семестр!")
+function progresStudent() {
+    var item = $("input[type=checkbox]:checked");
+    if (item.length == 0) {
+        alert("Выберите студента для просмотра прогресса!");
+        return;
     }
-
-    var result;
-
-    for (var i = 0; i < items.length; i++) {
-        if (result == null) {
-            result = $(items[i]).attr("value");
-        } else {
-            result = result + "," + $(items[i]).attr("value");
-        }
+    if (item.length > 1) {
+        alert("Выберите одного студента для просмотра прогресса!");
+        return;
     }
-
-    $('#createTermDiscBut input').val(result);
-    $('#createTermDiscBut').submit();
+    var id = $(item[0]).attr("value");
+    $('#studentProgres input').val(id);
+    $('#studentProgres').submit();
 }
+

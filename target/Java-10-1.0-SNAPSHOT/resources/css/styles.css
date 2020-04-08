@@ -10,7 +10,7 @@
     position: relative;
     float: left;
     font-family: Verdana, Geneva, Tahoma, sans-serif, cursive;
-    background-color: rgba(197, 219, 213, 0.6);
+    background-color: RGBA(152, 180, 212,0.4);
 }
 
 * {
@@ -69,15 +69,12 @@
 }
 
 td {
-    background-color:whitesmoke ;
+    background-color: #edebeb;
 }
 input{
     background-color: whitesmoke;
 }
 
-/*.tblclr{*/
-/*    background-color:whitesmoke ;*/
-/*}*/
 
 .tds {
     width: 15%;

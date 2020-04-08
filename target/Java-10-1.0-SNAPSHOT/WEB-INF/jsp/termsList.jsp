@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored="false" %>
+
 <html>
 <body>
 
@@ -12,16 +15,29 @@
 
 <div class="ml">
     <h2>Список дисциплин семестра</h2>
-    <p style="font-size: 1.2rem">Выберите семестр:
-        <select style="font-size: 1.2rem">
-            <option value="1">семестр 1</option>
-            <option value="2">семестр 2</option>
-            <option value="3">семестр 3</option>
-            <option value="3">семестр 4</option>
-            </optgroup>
-        </select>
+
+    <form action="/term" method="get">
+        <p style="font-size: 1.2rem">Выберите семестр:
+
+            <select style="font-size: 1.2rem" name="termSelect">
+                <c:forEach items="${termList}" var="t">
+                    <c:choose>
+                        <c:when test="${t.id eq selectedTerm.id}">
+                            <option selected value="${t.id}"> ${t.name}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${t.id}"> ${t.name}</option>
+                        </c:otherwise>
+                    </c:choose>
+
+                </c:forEach>
+                </optgroup>
+            </select>
+
+            <button id="butdisc" style="margin-left: 1%;">Применить</button>
+    </form>
     </p>
-    <p style="font-size: 1.2rem">Длительность семестра 24 недели</p>
+    <p style="font-size: 1.2rem">Длительность семестра: ${selectedTerm.duration}</p>
     <div style="display: ruby">
 
         <table id="tabledisc" border="1">
@@ -29,43 +45,38 @@
                 <th style="background-color: lightgrey">Наименование дисциплины</th>
 
             </tr>
-            <tr>
-                <td>Информатика</td>
-            </tr>
-            <tr>
-                <td>Системный анализ</td>
-            </tr>
-            <tr>
-                <td>Политология</td>
-            </tr>
-            <tr>
-                <td>Управление проектами</td>
-            </tr>
-            <tr>
-                <td>Основы дискретной математики</td>
-            </tr>
+            <c:forEach items="${selectedTerm.disciplinas}" var="d">
+                <tr>
+                    <td>${d.disciplina}</td>
+                </tr>
+
+            </c:forEach>
         </table>
 
     </div>
 
 
-    <table id="tbD">
+    <c:if test="${role eq 1}">
+        <table id="tbD">
 
-        <tr>
-            <td class="tdd"><a href="/termCreate" style="text-decoration: none">
-                <button class="bDisc"> Создать семестр</button>
-            </a></td>
-        </tr>
-        <tr>
-            <td><a href="/modifyTerm" style="text-decoration: none">
-                <button class="bDisc"> Модифицировать выбранный семест</button>
-            </a></td>
-        </tr>
-        <tr>
-            <td><a href="#" style="text-decoration: none">
-                <button class="bDisc"> Удалить выбранный семестр</button>
-            </a></td>
-        </tr>
-    </table>
+            <tr>
+                <td class="tdd"><a href="/termCreate" style="text-decoration: none">
+                    <button class="bDisc"> Создать семестр</button>
+                </a></td>
+            </tr>
+            <tr>
+                <td><a href="/modifyTerm" style="text-decoration: none">
+                    <button class="bDisc"> Модифицировать выбранный семест</button>
+                </a></td>
+            </tr>
+
+
+            <tr>
+                <td><a href="/deleteTerm" style="text-decoration: none">
+                    <button class="bDisc"> Удалить выбранный семестр</button>
+                </a></td>
+            </tr>
+        </table>
+    </c:if>
 </div>
 </body>

@@ -22,7 +22,7 @@ public class StudentsControll extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        resp.setContentType("application/json; charset=utf-8");
         List<Student> students = DBManager.getStudedentList();
         req.setAttribute("students", students);
 
