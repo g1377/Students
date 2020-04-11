@@ -18,13 +18,11 @@ public class TermsControll extends HttpServlet {
     }
 
 
-
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String termSelect = req.getParameter("termSelect");
 
-        req.getSession().setAttribute("termVal",termSelect);
+        req.getSession().setAttribute("termVal", termSelect);
         req.setAttribute("termList", DBManager.getAllActiveTerms());
-
 
         if (termSelect == null) {
             req.setAttribute("selectedTerm", DBManager.getAllActiveTerms().get(0));

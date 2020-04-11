@@ -23,10 +23,10 @@ public class DBManager {
     private static PreparedStatement getAllActiveTerms;
     private static PreparedStatement addDiscForTerm;
     private static PreparedStatement modifyTerm;
-    private static PreparedStatement deleteTermByMod;
     private static PreparedStatement modifyTermByDisc;
     private static PreparedStatement updateDurationTerm;
     private static PreparedStatement deleteTerm;
+    private static PreparedStatement progresStudentByTerm;
 
 
     static {
@@ -43,16 +43,13 @@ public class DBManager {
             dellDisc = connection.prepareStatement("UPDATE discipline SET status = 0 WHERE id = ?;");
             getAccByLogPass = connection.prepareStatement("SELECT * FROM user_role left join user on user_role.id_user = user.id  where user.user = ? and user.password = ? and user_role.id_role = ?");
             createTerm = connection.prepareStatement("INSERT INTO `student_crm`.`term` (`name`, `duration`) VALUES (?, ?);");
-            getAllActiveTerms = connection.prepareStatement("SELECT * FROM term_discipline td\n" +
-                    "left join term t on td.id_term =  t.id\n" +
-                    "left join discipline d on td.id_disc = d.id\n" +
-                    "where status = 1 order by t.name");
-            deleteTermByMod = connection.prepareStatement("delete from term_discipline where id_term = ?;");
+            getAllActiveTerms = connection.prepareStatement("SELECT * FROM term_discipline td left join term t on td.id_term =  t.id left join discipline d on td.id_disc = d.id where status = 1 order by t.name");
             addDiscForTerm = connection.prepareStatement("INSERT INTO term_discipline (id_term, id_disc) values (?,?);");
             modifyTerm = connection.prepareStatement("delete from term_discipline where id_term = ?;");
             updateDurationTerm = connection.prepareStatement("update term set duration = ? where id = ?;");
             modifyTermByDisc = connection.prepareStatement("insert into term_discipline(id_term, id_disc) values (?,?);");
             deleteTerm = connection.prepareStatement("delete from term where id = ? ;");
+            progresStudentByTerm = connection.prepareStatement("SELECT * FROM marks m left join term_discipline t on m.id_term_disc = t.id left join discipline d on  t.id_disc = d.id where  m.id_student = ? and t.id_term= ?;");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -74,8 +71,6 @@ public class DBManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static List<Disciplina> getDisciplineList() {
@@ -100,7 +95,6 @@ public class DBManager {
 
     public static List<Student> getStudedentList() {
         List<Student> students = new ArrayList<>();
-
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("Select * from student where status = 1");
@@ -173,7 +167,6 @@ public class DBManager {
 
 
     public static void deleteDiscipline(String[] ids) {
-
         try {
             for (String i : ids) {
                 dellDisc.setString(1, i);
@@ -188,7 +181,6 @@ public class DBManager {
     public static Student getStudentById(String id) {
         Student student = new Student();
         try {
-
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(" select * from  student where id= " + id + " and status = 1 ; ");
             while (rs.next()) {
@@ -203,6 +195,7 @@ public class DBManager {
         }
         return student;
     }
+
 
     public static void modifyTermByDisc(String idTerm, String[] disciplines, String duration) {
         try {
@@ -223,7 +216,6 @@ public class DBManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void updateDuration(String idTerm, String duration) {
@@ -234,7 +226,6 @@ public class DBManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public static List<Term> getAllActiveTerms() {
@@ -335,6 +326,21 @@ public class DBManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static HashMap<String, String> progresStudentByTerm(String idStudent, String idTerm) {
+        HashMap<String, String> resP = new HashMap<>();
+        try {
+            progresStudentByTerm.setString(1, idStudent);
+            progresStudentByTerm.setString(2, idTerm);
+            ResultSet rs = progresStudentByTerm.executeQuery();
+            while (rs.next()) {
+                resP.put(rs.getString("discipline"), rs.getString("mark"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resP;
     }
 
 

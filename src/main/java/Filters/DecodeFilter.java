@@ -18,19 +18,10 @@ public class DecodeFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
+
         req.setCharacterEncoding("UTF-8");
+        res.setCharacterEncoding("UTF-8");
 
-        Cookie[] cookies = req.getCookies();
-
-//        if (DecodeFilterUtils.isCookieContain(cookies, "getCount")) {
-//            int count = Integer.parseInt(DecodeFilterUtils.getCookieByName(cookies, "getCount").getValue());
-//            count++;
-//            Cookie cookie = new Cookie("getCount", "" + count);
-//            res.addCookie(cookie);
-//        } else {
-//            Cookie cookie = new Cookie("getCount", "1");
-//            res.addCookie(cookie);
-//        }
 
         filterChain.doFilter(req, res);
     }

@@ -20,7 +20,7 @@
         <form method="post" action="/termCreate">
             <p><input type="text" style="font-size: 1.2rem" required placeholder="Название семестра" name="termName">
             </p>
-            <p><input type="text" style="font-size: 1.2rem"  placeholder="Длительность" required id="duration"
+            <p><input type="text" style="font-size: 1.2rem" placeholder="Длительность" required id="duration"
                       name="duration">
             </p>
 

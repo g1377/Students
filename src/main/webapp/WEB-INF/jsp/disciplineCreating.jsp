@@ -18,13 +18,14 @@
     </a>
 </p>
 <div class="ml">
-<h2>Для того чтобы создать новую дисциплину заполнити все поля и нажмите "Создать"</h2>
-<form action="/createDiscipline" method="post">
-    <div >
-        <p ><input type="text" style="font-size: 1.2rem" required placeholder="Название дисциплины" name="newDisc"></p>
-        <button type="submit"  id="butdisc" name="submit" >Создать</button>
-    </div>
-</form>
+    <h2>Для того чтобы создать новую дисциплину заполнити все поля и нажмите "Создать"</h2>
+    <form action="/createDiscipline" method="post">
+        <div>
+            <p><input type="text" style="font-size: 1.2rem" required placeholder="Название дисциплины" name="newDisc">
+            </p>
+            <button type="submit" id="butdisc" name="submit">Создать</button>
+        </div>
+    </form>
 </div>
 </body>
 </html>

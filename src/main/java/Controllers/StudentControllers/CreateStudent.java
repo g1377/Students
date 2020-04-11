@@ -14,8 +14,8 @@ public class CreateStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        req.setAttribute("current_page","/WEB-INF/jsp/studentCreating.jsp");
-        req.getRequestDispatcher("./WEB-INF/jsp/template.jsp").forward(req,resp);
+        req.setAttribute("current_page", "/WEB-INF/jsp/studentCreating.jsp");
+        req.getRequestDispatcher("./WEB-INF/jsp/template.jsp").forward(req, resp);
 
     }
 
@@ -28,7 +28,7 @@ public class CreateStudent extends HttpServlet {
         String name = req.getParameter("name");
         String group = req.getParameter("group");
         String date = req.getParameter("date");
-        DBManager.addStudent(lastName,name,group,date);
+        DBManager.addStudent(lastName, name, group, date);
 
         resp.sendRedirect("/students");
     }

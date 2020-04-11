@@ -16,9 +16,7 @@ public class ModifyStudent extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         idStudent = req.getParameter("idModifyStudent");
-        resp.setContentType("application/json; charset=utf-8");
 
         Student student = DBManager.getStudentById(idStudent);
         req.setAttribute("studentById", student);
@@ -29,12 +27,10 @@ public class ModifyStudent extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         String lastName = req.getParameter("lastName");
         String name = req.getParameter("name");
         String group = req.getParameter("group");
         String date = req.getParameter("date");
-        System.out.println(lastName+ name+date +" строка1");
 
         DBManager.modifyStudent(idStudent, lastName, name, group, date);
 

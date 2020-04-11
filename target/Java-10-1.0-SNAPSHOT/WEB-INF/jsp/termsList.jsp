@@ -18,11 +18,10 @@
 
     <form action="/term" method="get">
         <p style="font-size: 1.2rem">Выберите семестр:
-
             <select style="font-size: 1.2rem" name="termSelect">
                 <c:forEach items="${termList}" var="t">
                     <c:choose>
-                        <c:when test="${t.id eq selectedTerm.id}">
+                        <c:when test="${t.id eq selectedTerm}">
                             <option selected value="${t.id}"> ${t.name}</option>
                         </c:when>
                         <c:otherwise>
@@ -31,11 +30,10 @@
                     </c:choose>
 
                 </c:forEach>
-                </optgroup>
             </select>
-
             <button id="butdisc" style="margin-left: 1%;">Применить</button>
     </form>
+
     </p>
     <p style="font-size: 1.2rem">Длительность семестра: ${selectedTerm.duration}</p>
     <div style="display: ruby">

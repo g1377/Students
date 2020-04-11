@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
 
 
-<%--    <link rel="stylesheet" href="/resources/css/styles.css">--%>
+    <%--    <link rel="stylesheet" href="/resources/css/styles.css">--%>
     <title>Discipline </title>
 
     <p>

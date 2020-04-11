@@ -14,6 +14,7 @@ import java.util.List;
 @WebServlet(name = "StudentsControll", urlPatterns = "/students")
 public class StudentsControll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         String valueForDelet = request.getParameter("idsDeleteStudent");
         String[] masForDelet = valueForDelet.split(",");
         DBManager.deleteStudent(masForDelet);
@@ -22,7 +23,7 @@ public class StudentsControll extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json; charset=utf-8");
+
         List<Student> students = DBManager.getStudedentList();
         req.setAttribute("students", students);
 

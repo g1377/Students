@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored="false" %>
 
 <body>
 <title>Progress student</title>
@@ -19,61 +20,52 @@
             <tr>
                 <th>Фамилия</th>
                 <th>Имя</th>
-                <th>Отечство</th>
+                <th>Группа</th>
                 <th>Дата поступления</th>
             </tr>
-            <tr>
-                <td>*</td>
-                <td>*</td>
-                <td>*</td>
-                <td>*</td>
+            <tr style="text-align: center">
+                <td>${studentForProgres.lastName}</td>
+                <td>${studentForProgres.name}</td>
+                <td>${studentForProgres.group}</td>
+                <td>${studentForProgres.date}</td>
             </tr>
         </table>
     </div>
-    <div class="term1">
-        <select id="select" style="height: 30px">
-            <optgroup label="выбрать семестр">
-                <option value="r1">семестр 1</option>
-                <option value="r2">семестр 2</option>
-                <option value="r3">семестр 3</option>
-                <option value="r3">семестр 4</option>
-            </optgroup>
-        </select>
-        <a href="#">
-            <button type="button" class="btnsus">Выбрать</button>
-        </a>
 
-    </div>
-    <div c>
+    <form method="post" action="/progresStudent">
+        <div class="term1" style="margin-top: 1%">
+            <select id="select" style="height: 30px" name="selectTerm">
+                <c:forEach items="${allTerms}" var="t">
+                    <c:choose>
+                        <c:when test="${t.id eq selectTermId}">
+                            <option selected value="${t.id}">${t.name}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${t.id}">${t.name}</option>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </select>
+            <button class="btnsus">Выбрать</button>
+        </div>
+    </form>
 
+    <div>
+        <h4>Средняя оценка ученика : <b>${valueMark}</b> балла</h4>
         <table id="tb2" border="1">
             <tr>
-                <th>Дисциплина</th>
+                <th style="width: 70%">Дисциплина</th>
                 <th>Оценка</th>
             </tr>
-            <tr>
-                <td>Информатика</td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td>Системный анализ</td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td>Политология</td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td>Управление проектами</td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td>Основы дискретной математики</td>
-                <td>*</td>
-            </tr>
+            <c:forEach items="${discMark}" var="t">
+                <tr style="text-align: center">
+                    <td>${t.key}</td>
+                    <td>${t.value}</td>
+                </tr>
+            </c:forEach>
         </table>
     </div>
-    <h4>Средняя оценка ученика : <b>4</b> балла</h4>
+
 </div>
 </body>
 
